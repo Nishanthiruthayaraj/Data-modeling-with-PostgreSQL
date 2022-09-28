@@ -7,19 +7,17 @@ from sql_queries import *
 
 def process_song_file(cur, filepath):
     """
-    Read all the song files and insert the song_data and artist_data into the tables song_table_insert and artist_table_insert respectively.
-    
+    Read all the song files and insert the song_data and artist_data into the tables song_table_insert and artist_table_insert respectively
     Parameters:
-                cur (psycopg2.connect().cursor): cursor to sparkifydb database.
-                filepath (str): Filepath of data to to be read.
+                cur (psycopg2.connect().cursor): cursor to sparkifydb database
+                filepath (str): Filepath of data to to be read
     
     """
-    
     # open song file
     df = pd.read_json(filepath, lines=True)
 
     # insert song record
-    song_data = df[['song_id','title','artist_id','year','duration']].values.tolist()
+    song_data = df[['song_id','title','artist_id','year','duration']].values.tolist()[0]
     cur.execute(song_table_insert, song_data)
     
     # insert artist record
@@ -28,12 +26,20 @@ def process_song_file(cur, filepath):
 
 
 def process_log_file(cur, filepath):
+    """
+    Read all the log files and insert the data into time_table, user_table and songplay_table
+    
+    Parameters:
+                cur (psycopg2.connect().cursor): cursor to sparkifydb database
+                filepath (str): Filepath of data to to be read
+    
+    """
     # open log file
     df = pd.read_json(filepath, lines=True)
-
+    
     # filter by NextSong action
     df = df[df['page'] == 'NextSong'].copy()
-
+    
     # convert timestamp column to datetime
     df["ts"] = pd.to_datetime(df['ts'], unit='ms')
     
@@ -70,6 +76,15 @@ def process_log_file(cur, filepath):
         
 
 def process_data(cur, conn, filepath, func):
+    """
+    Function to read and load data from song_data and log_data into the database  
+    Parameters:
+                cur (psycopg2.connect().cursor): cursor to sparkifydb database
+                conn (psycopg2.connect): connect to sparkifydb database
+                filepath (str): path to root directory
+                func(name of function): what function to call
+    
+    """
     # get all files matching extension from directory
     all_files = []
     for root, dirs, files in os.walk(filepath):

@@ -13,19 +13,19 @@ songplay_table_create = ("CREATE TABLE IF NOT EXISTS songplays ( \
                              songplay_id SERIAL PRIMARY KEY, start_time \
                          timestamp, user_id int NOT NULL, level varchar(200), \
                          song_id varchar(200), artist_id varchar(200), \
-                         session_id int NOT NULL, location varchar(200) NOT NULL, user_agent varchar)") 
+                         session_id int NOT NULL, location varchar(200), user_agent varchar)") 
 
 user_table_create = ("CREATE TABLE IF NOT EXISTS users (\
                              user_id int PRIMARY KEY, first_name varchar NOT NULL, last_name varchar NOT NULL, \
                              gender varchar, level varchar)")
 
 song_table_create = ("CREATE TABLE IF NOT EXISTS songs (\
-                            song_id varchar PRIMARY KEY, title varchar(200) NOT NULL, artist_id varchar(200) NOT NULL, \
-                            year int, duration decimal NOT NULL)")
+                            song_id varchar PRIMARY KEY, title varchar(200), artist_id varchar(200), \
+                            year int, duration decimal)")
 
 artist_table_create = ("CREATE TABLE IF NOT EXISTS artists ( \
-                            artist_id varchar PRIMARY KEY, name varchar, location varchar NOT NULL, \
-                            latitude numeric, longitude numeric)")
+                            artist_id varchar PRIMARY KEY, name varchar, location varchar, \
+                            latitude float, longitude float)")
 
 time_table_create = ("CREATE TABLE IF NOT EXISTS time(\
                             start_time timestamp PRIMARY KEY, hour int NOT NULL, day int NOT NULL, week int NOT NULL, \
